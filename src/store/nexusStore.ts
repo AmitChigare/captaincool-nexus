@@ -55,6 +55,9 @@ export interface NexusState {
   // Actions
   setView: (view: NexusState['currentView']) => void;
   updateTypingState: (id: string, text: string, isTyping: boolean) => void;
+  logTelemetry: (data: { agent: string; event: string; message: string }) => void;
+  updateTelemetryMetrics: (metrics: Partial<NexusState['telemetryMetrics']>) => void;
+  setActiveTool: (toolName: string) => void;
 }
 
 export const useNexusStore = create<NexusState>((set) => ({
@@ -133,5 +136,10 @@ export const useNexusStore = create<NexusState>((set) => ({
   setView: (view) => set({ currentView: view }),
   updateTypingState: (id, text, isTyping) => set((state) => ({
     debateStream: state.debateStream.map(msg => msg.id === id ? { ...msg, text, isTyping } : msg)
-  }))
+  })),
+  logTelemetry: (data) => console.log(`[Telemetry] ${data.agent} - ${data.event}: ${data.message}`),
+  updateTelemetryMetrics: (metrics) => set((state) => ({
+    telemetryMetrics: { ...state.telemetryMetrics, ...metrics }
+  })),
+  setActiveTool: (toolName) => console.log(`[Tool] Active tool set to: ${toolName}`)
 }));
