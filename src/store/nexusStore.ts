@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 
+export interface TelemetryLog {
+  agent: string;
+  event: string;
+  message: string;
+  timestamp: string;
+}
+
 export interface NexusState {
-  orchestrationStatus: 'Idle' | 'Active' | 'Debating' | 'Synthesizing';
+  orchestrationStatus: 'Idle' | 'Active' | 'Debating' | 'Synthesizing' | 'Tool Execution';
   activeAgents: { id: string; name: string; status: string; load: number }[];
   matchContext: {
     battingTeam: string;
@@ -19,11 +26,25 @@ export interface NexusState {
     riskLevel: string;
   };
   
+  // New metrics
+  telemetryLogs: TelemetryLog[];
+  metrics: {
+    latency: number;
+    tokenUsage: number;
+    memoryRetrievalCount: number;
+  };
+  activeTool: string | null;
+  rejectedStrategies: string[];
+  consensusHistory: { timestamp: string; value: number }[];
+
   // Actions
   setOrchestrationStatus: (status: NexusState['orchestrationStatus']) => void;
   updateAgentLoad: (id: string, load: number) => void;
   addDebateMessage: (msg: NexusState['debateStream'][0]) => void;
   updateDirective: (directive: NexusState['primaryDirective']) => void;
+  logTelemetry: (log: Omit<TelemetryLog, 'timestamp'>) => void;
+  updateTelemetryMetrics: (metrics: Partial<NexusState['metrics']>) => void;
+  setActiveTool: (tool: string | null) => void;
 }
 
 export const useNexusStore = create<NexusState>((set) => ({
@@ -54,6 +75,26 @@ export const useNexusStore = create<NexusState>((set) => ({
     riskLevel: 'Moderate'
   },
 
+  telemetryLogs: [
+    { agent: 'Orchestrator', event: 'SYSTEM_START', message: 'ADK Core Online', timestamp: new Date().toISOString() }
+  ],
+  metrics: {
+    latency: 124,
+    tokenUsage: 12040,
+    memoryRetrievalCount: 42
+  },
+  activeTool: null,
+  rejectedStrategies: [
+    "Pre-meditate sweep (Prob: 32%)",
+    "Advance down track (Prob: 18%)",
+    "Switch hit (Prob: 12%)"
+  ],
+  consensusHistory: [
+    { timestamp: '15.0', value: 45 },
+    { timestamp: '15.1', value: 60 },
+    { timestamp: '15.2', value: 85 }
+  ],
+
   setOrchestrationStatus: (status) => set({ orchestrationStatus: status }),
   updateAgentLoad: (id, load) => set((state) => ({
     activeAgents: state.activeAgents.map(a => a.id === id ? { ...a, load } : a)
@@ -61,5 +102,13 @@ export const useNexusStore = create<NexusState>((set) => ({
   addDebateMessage: (msg) => set((state) => ({
     debateStream: [...state.debateStream, msg]
   })),
-  updateDirective: (directive) => set({ primaryDirective: directive })
+  updateDirective: (directive) => set({ primaryDirective: directive }),
+  
+  logTelemetry: (log) => set((state) => ({
+    telemetryLogs: [{ ...log, timestamp: new Date().toISOString() }, ...state.telemetryLogs].slice(0, 50)
+  })),
+  updateTelemetryMetrics: (metrics) => set((state) => ({
+    metrics: { ...state.metrics, ...metrics }
+  })),
+  setActiveTool: (tool) => set({ activeTool: tool })
 }));
