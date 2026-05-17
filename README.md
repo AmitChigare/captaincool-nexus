@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CaptainCool Nexus 🏏🤖
 
-## Getting Started
+**CaptainCool Nexus** is a research-grade, autonomous AI cricket command center. 
+Built on a high-performance Next.js 15 App Router architecture, it simulates a state-of-the-art Formula 1 pit-wall and military command center, entirely dedicated to real-time cricket tactical intelligence.
 
-First, run the development server:
+## 🚀 Tech Stack
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4 (with custom Dark Tactical Theme)
+- **Animations:** Framer Motion
+- **UI Components:** shadcn/ui & Lucide React icons
+- **State Management:** Zustand
+- **Data Fetching:** React Query
+- **AI Ecosystem integration:** Gemini 2.5 Pro, Gemini 2.5 Flash, Vertex AI, Google ADK
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📂 Architecture Structure
+
+This repository is organized to support multi-agent collaboration, memory persistence, and telemetry:
+
+```text
+src/
+├── agents/
+│   ├── orchestration/    # Coordinates Gemini 2.5 Pro and Flash
+│   ├── persona/          # "Captain" Persona (MS Dhoni style logic)
+│   └── consensus/        # Resolves tactical conflicts between agents
+├── components/
+│   ├── dashboard/        # Main F1 Pit-wall UI (CommandCenter.tsx)
+│   ├── panels/           # Telemetry panels
+│   └── telemetry/        # Live match data visualizations
+├── lib/
+│   ├── adk/              # Google ADK Integration
+│   ├── memory/           # Long-context tactical memory
+│   ├── multimodal/       # Process live video/audio feeds
+│   ├── simulation/       # Runs forward-pass match simulations
+│   ├── telemetry/        # Collects and parses match data
+│   └── tools/            # External AI tool execution
+├── store/                # Zustand State management
+└── app/                  # Next.js App Router (Pages & Layout)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🎮 Command Center Features
+1. **Live Orchestration Console:** Real-time metrics on running agents (load, role, subsystem).
+2. **Animated Telemetry Panels:** Tactical metrics (Win probability, pitch conditions) visualized with Framer Motion.
+3. **Consensus Engine Debate Stream:** Live view of the agents (Tactics vs Data) arguing and formulating strategy.
+4. **Simulation Timeline:** Projecting the outcomes of the next 3 deliveries.
+5. **Score Intelligence Ribbon:** At-a-glance match situation.
+6. **Live Directives:** Actionable insights based on multimodal feed analysis.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Getting Started
+```bash
+# Start the development server
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit `http://localhost:3000` to access the Nexus.
